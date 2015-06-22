@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+
+  <script src="min.js"></script>
+  <script src="topo.js"></script>
+  <!-- I recommend you host this file on your own, since this will change without warning -->
+  <script src="map.js"></script>
+  <script src="jquery.js"></script>
+
+<div id="container" style="position: relative; width: 100%;"></div>
+<script>
+var arcs = new Datamap({
+  element: document.getElementById("container"),
+  scope: 'usa',
+  fills: {
+    defaultFill: "#ABDDA4",
+    //win: '#0fa0fa'
+  },
+  height:800,
+  data: {
+    'TX': { fillKey: 'win' },
+    'FL': { fillKey: 'win' },
+    'NC': { fillKey: 'win' },
+    'CA': { fillKey: 'win' },
+    'NY': { fillKey: 'win' },
+    'CO': { fillKey: 'win' }
+  }
+});
+
+
+$.getJSON( 'USA.json', function( json ) { 
+console.log("here");  
+      links= json;
+      arcs.arc(links,  {strokeWidth: 0.7, arcSharpness: 1.6,greatArc: false,strokeColor: 'rgba(100, 10, 200, 0.4)'});
+      });
+
+
+
+
+</script>	
+</body>

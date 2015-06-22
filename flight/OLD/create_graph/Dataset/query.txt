@@ -1,0 +1,12 @@
+use flight;
+
+select * from 
+(select origin.lat as orig_lat ,origin.lng as origin_lng ,dest.lat as dest_lat ,dest.lng as dest_lng , fly.num_pass as num_pass 
+from global_airport as origin ,(select origin, dest, sum(num_pass) as num_pass from source_to_target 
+group by origin,dest)as fly,global_airport as dest
+where fly.ORIGIN=origin.iata_faa and fly.DEST=dest.iata_faa) as A
+order by A.num_pass desc limit 500
+INTO OUTFILE 'C:/Users/andrea/Desktop/flight/create_graph/Dataset/edge.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';

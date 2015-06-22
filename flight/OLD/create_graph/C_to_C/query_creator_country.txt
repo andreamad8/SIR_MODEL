@@ -1,0 +1,13 @@
+use flight;
+
+select * from 
+(select origin.country as origin_cou,dest.country as dest_cou , fly.num_pass as num_pass 
+from global_airport as origin ,(select origin, dest, sum(num_pass) as num_pass from source_to_target 
+group by origin,dest)as fly,global_airport as dest
+where fly.ORIGIN=origin.iata_faa and fly.DEST=dest.iata_faa) as A
+group by origin_cou,dest_cou
+order by A.num_pass desc
+INTO OUTFILE 'C:/Users/andrea/Desktop/flight/create_graph/Dataset/flight_c_to_c.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'; 

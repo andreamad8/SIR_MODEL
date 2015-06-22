@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+dl{
+  width: 150pt !important;
+  height: 100pt !important;
+  font-size: 18pt
+}
+dt{
+   clear: left !important;
+   margin-right: 10pt !important
+}
+dd{
+    float: right!important;
+  clear: right !important;
+}
+div{
+  font-size: 30pt 
+}
+</style>
+<body>
+  <script src="min.js"></script>
+  <script src="topo.js"></script>
+  <script src="jquery.js"></script>
+  <script src="map.js"></script>
+
+  <div id="container" style=" width: 60%;height:100%;float:left"></div>
+ <div id="container1" style=" width: 40%; height:100%;float:right;"></div>
+     
+<script>
+       //basic map config with custom fills, mercator projection
+      var map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container'),
+        projection: 'mercator',
+        geographyConfig: {
+            highlightOnHover: false,
+            popupOnHover: true
+        },
+        //height: 1000,
+        responsive: true,
+        fills: {
+          defaultFill: '#FFCC00' /*'#ABDDA4'*/,
+          'Susceptible': '#FFCC00',
+          'Infected 15%': '#FFA500',
+          'Infected 50%': '#FF4900',
+          'Recovered': '#008000',
+
+
+
+        },
+        
+        data: {
+          //ITA: {fillKey: 'lt50' },    
+        }
+      })
+      
+      links_path='globe.json';
+      $.getJSON( links_path, function( json ) {
+       
+        links= json;
+        map.arc(links, {strokeWidth: 0.1,greatArc:true ,arcSharpness: 0.5,strokeColor: '#000000'});
+      });
+map.legend();
+
+
+
+
+ var map_globe = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container1'),
+        projection: 'orthographic',
+        fills: {
+          defaultFill: '#FFCC00' /*'#ABDDA4'*/ 
+        },
+        geographyConfig: {
+            highlightOnHover: false,
+            popupOnHover: true
+        },
+        projectionConfig: {
+          rotation: [0,-30]
+        },
+        responsive: true,
+        data: {
+         // "ITA": {"fillKey":"lt50" }    
+        }
+      });
+
+      map_globe.graticule();
+      links_path='globe.json';
+          $.getJSON( links_path, function( json ) { 
+            links= json;
+            map_globe.arc(links, {strokeWidth: 0.1,greatArc:false ,arcSharpness: 0.5,strokeColor: '#000000'});
+      });
+map_globe.legend();
+
+
+$.getJSON( 'change.json', function( json ) { 
+          function update(i){
+                map.updateChoropleth(json[i]);
+                map_globe.updateChoropleth(json[i]);
+              }
+
+          var i=0;
+          var id=window.setInterval(function(){
+                                                update(i);
+                                                $(".datamaps-legend").append("<div id="+i+" hidden>Day "+i+"</div>")
+                                                $("#"+(i-1)).hide();
+                                                $("#"+(i)).show();
+                                                
+                                                i++;
+                                                if(i==200){
+                                                  i=0
+                                                };
+
+                                              }
+
+                                                  ,800);
+
+        });
+
+
+</script> 
+</body>

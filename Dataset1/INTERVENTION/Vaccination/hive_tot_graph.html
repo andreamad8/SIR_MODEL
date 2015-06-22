@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.link {
+  fill: none;
+  stroke-width: 0.5px;
+}
+
+.axis  {
+  stroke: #FFFFFF;
+  stroke-width: 1px;
+}
+    table
+    {
+        position: absolute;
+        left: 0;
+        border: 1px solid white;
+        border-collapse:collapse;
+        width: 100%;
+        color: white;
+        text-align:center;
+        margin: 0;
+        padding: 0;
+    }
+    td{
+              border: 1px solid white;
+        border-collapse:collapse;
+      width: 33%
+    }
+
+svg{
+  background-color: black;
+  float: left
+}
+body{
+  background-color: black;
+}
+</style>
+<body>
+<andrea></andrea>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.hive.v0.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+function plot(t){
+        var width = 450,
+            height = 600,
+            innerRadius = 40,
+            outerRadius = 240;
+
+        var angle = d3.scale.ordinal().domain(d3.range(4)).rangePoints([0, 2 * Math.PI]),
+            radius = d3.scale.linear().range([innerRadius, outerRadius]),
+            color = d3.scale.category10().domain(d3.range(20));
+
+
+
+        var svg = d3.select("#"+cont).append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        svg.selectAll(".axis")
+            .data([0,1,2])
+            .enter().append("line")
+            .attr("class", "axis")
+            .attr("transform", function(d) { return "rotate(" + degrees(angle(d)) + ")"; })
+            .attr("x1", radius.range()[0])
+            .attr("x2", radius.range()[1]);
+
+            svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", 0)
+            .attr("y", -245)
+            .text("I")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: red")
+
+
+        svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", -216.506350945)
+            .attr("y", 125)
+            .text("S")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: orange")
+
+        svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", +216.506350945)
+            .attr("y", 125)
+            .text("R")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: green")
+
+
+        var links_path='links_full_graph/links$s.json'.replace('$s', t);
+        $.getJSON( links_path, function( json ) { 
+          links= json;
+          svg.selectAll(".link")
+              .data(links)
+              .enter().append("path")
+              .attr("class", "link")
+              .attr("d", d3.hive.link()
+              .angle(function(d) { return angle(d.x); })
+              .radius(function(d) { return radius(d.y); }))
+              .style("stroke", function(d) {return "yellow";})
+              .style("stroke-width", function(d) { return 0.2;}); 
+        });
+
+        var nodes_path='nodes_full_graph/nodes$s.json'.replace('$s', t);
+        $.getJSON( nodes_path, function( json ) { 
+          nodes= json; 
+          svg.selectAll(".node")
+              .data(nodes)
+              .enter().append("circle")
+              .attr("class", "node")
+              .attr("transform", function(d) { return "rotate(" + degrees(angle(d.x)) + ")"; })
+              .attr("cx", function(d) { return radius(d.y); })
+              .attr("r", 1)
+              .style("fill", function(d) { if(d.x==2 && d.vac==1) return "purple";
+                                            if(d.x==2) return "orange";
+                                              if(d.x==0) return "red";
+                                              if(d.x==1) return "green"; });
+            
+        });
+
+        function degrees(radians) {
+          return radians / Math.PI * 180 - 90;
+        }
+
+  }
+
+
+
+function plot_vac(t){
+        var width = 450,
+            height = 600,
+            innerRadius = 40,
+            outerRadius = 240;
+
+        var radius = d3.scale.linear().range([innerRadius, outerRadius]),
+            color = d3.scale.category10().domain(d3.range(20));
+
+        function angle(d){
+          if (d==0) return -90;
+          if (d==1) return 30;
+          if (d==2) return 150;
+          if (d==3) return 90;
+        }
+        function angle_rad(d){
+          if (d==0) return 0;
+          if (d==1) return 2.0943951023931953;
+          if (d==2) return 4.1887902047863905;
+          if (d==3) return 4.1887902047863905-1.0471975512;
+        }
+        var svg = d3.select("#"+cont).append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        svg.selectAll(".axis")
+            .data([0,1,2,3])
+            .enter().append("line")
+            .attr("class", "axis")
+            .attr("transform", function(d) {  if (d==0) return "rotate(-90)";
+                                              if (d==1) return "rotate(30)";
+                                              if (d==2) return "rotate(150)";
+                                              if (d==3) return "rotate(90)"; })
+            .attr("x1", radius.range()[0])
+            .attr("x2", radius.range()[1]);
+
+        svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", 0)
+            .attr("y", -245)
+            .text("I")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: red")
+
+
+        svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", -216.506350945)
+            .attr("y", 125)
+            .text("S")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: orange")
+
+        svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x", +216.506350945)
+            .attr("y", 125)
+            .text("R")
+            .attr("text-anchor", "middle")
+
+            .attr("style", "fill: green")
+
+       svg.append("text")
+            .attr("id", "hivposlabel")
+            .attr("x",0)
+            .attr("y", 255)
+            .text("V")
+            .attr("text-anchor", "middle")
+            .attr("style", "fill: purple")
+
+
+
+        var links_path='links/links$s.json'.replace('$s', t);
+        $.getJSON( links_path, function( json ) { 
+          links= json;
+          svg.selectAll(".link")
+              .data(links)
+              .enter().append("path")
+              .attr("class", "link")
+              .attr("d", d3.hive.link()
+              .angle(function(d) { return angle_rad(d.x); })
+              .radius(function(d) { return radius(d.y); }))
+              .style("stroke", function(d) {if(d.target.x==0) return "red";
+                                            if(d.target.x==3) return "purple";
+                                            else return "green";})
+              .style("stroke-width", function(d) { return 0.5;}); 
+            if(t==18){
+            window.setTimeout(function(){
+                var i=0;
+                var id=window.setInterval(function(){ plot(i);i++;if(i==20) i=0;},5000);
+
+                   function plot(i){
+                    j=i-1;
+                    $("#cont"+j).hide();
+                    $("#cont"+i).show();
+                  }
+
+
+            },2000)
+          }
+        });
+
+
+        var nodes_path='nodes/nodes$s.json'.replace('$s', t);
+        $.getJSON( nodes_path, function( json ) {  
+          nodes= json; 
+          svg.selectAll(".node")
+              .data(nodes)
+              .enter().append("circle")
+              .attr("class", "node")
+              .attr("transform", function(d) { return "rotate(" + angle(d.x) + ")"; })
+              .attr("cx", function(d) { return radius(d.y); })
+              .attr("r", 2)
+              .style("fill", function(d) { if(d.x==2) return "orange";
+                                              if(d.x==0) return "red";
+                                              if(d.x==1) return "green"; 
+                                              if(d.x==3) return "purple"; });
+            
+        });
+
+        function degrees(radians) {
+          return radians / Math.PI * 180 - 90;
+        }
+
+}
+
+for (var i = 0; i < 19; i++) {
+    $("andrea").append("<div id='cont"+i+"' hidden></div>");
+    cont="cont"+i;
+    plot(i,cont);
+    plot(i+1,cont);
+    plot_vac(i,cont);
+    $("#cont"+i).append("<table><tr><td> Day "+i+"</td><td>Day "+(i+1)+"</td><td>Change between day "+i+" and day "+(i+1)+"</td></tr></table>");
+
+};
+
+</script>
+</body>

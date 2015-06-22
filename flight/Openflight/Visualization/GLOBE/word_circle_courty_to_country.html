@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="min.js"></script>
+  <script src="topo.js"></script>
+  <script src="jquery.js"></script>
+  <script src="map.js"></script>
+<div id="container1" style="position: relative; width: 100%; height: 100%;"></div>
+<script>
+ var map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container1'),
+        projection: 'orthographic',
+        fills: {
+          defaultFill: "#f0af0a"
+        },
+        projectionConfig: {
+          rotation: [30,-65]
+        },
+        responsive: true,
+       /* data: {
+          'USA': {fillKey: 'lt50' },
+          'MEX': {fillKey: 'lt25' },
+          'CAN': {fillKey: 'gt50' },     
+          'GTM': {fillKey: 'gt500'},
+          'HND': {fillKey: 'eq50' },
+          'BLZ': {fillKey: 'pink' },
+          'GRL': {fillKey: 'eq0' },
+          'CAN': {fillKey: 'gt50' }       
+        }*/
+      });
+
+      map.graticule();
+var links_path='globe.json';
+    $.getJSON( links_path, function( json ) { 
+      links= json;
+      map.arc(links, {strokeWidth: 0.5,greatArc:true ,arcSharpness: 3});
+});
+
+
+</script> 
+</body>

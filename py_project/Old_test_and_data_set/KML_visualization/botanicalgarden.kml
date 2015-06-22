@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="feat_1">
+        <Style id="stylesel_0">
+            <IconStyle id="substyle_0">
+                <colorMode>normal</colorMode>
+                <scale>0.5</scale>
+                <heading>0</heading>
+                <Icon id="link_0">
+                    <href>C:/Users/andrea/Desktop/flight/KML_visualization/red.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Placemark id="feat_2">
+            <name>London United Kingdom Heathrow</name>
+            <styleUrl>#stylesel_0</styleUrl>
+            <Point id="geom_0">
+                <coordinates>-0.103,51.795,0.0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark id="feat_3">
+            <name>Moscow Russia Domododevo</name>
+            <Point id="geom_1">
+                <coordinates>38.51,55.681,0.0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark id="feat_4">
+            <name>Hong Kong</name>
+            <Point id="geom_2">
+                <coordinates>114.524,22.514,0.0</coordinates>
+            </Point>
+        </Placemark>
+        <Placemark id="feat_5">
+            <Polygon id="geom_3">
+                <outerBoundaryIs>
+                    <LinearRing id="geom_4">
+                        <coordinates>-0.103,51.795,0.0 38.51,55.681,0.0</coordinates>
+                    </LinearRing>
+                </outerBoundaryIs>
+            </Polygon>
+        </Placemark>
+    </Document>
+</kml>

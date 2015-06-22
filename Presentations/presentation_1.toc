@@ -1,0 +1,10 @@
+\beamer@endinputifotherversion {3.33pt}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {2}{SIR Models}{5}{0}{2}
+\beamer@subsectionintoc {2}{1}{Compartment model}{5}{0}{2}
+\beamer@subsectionintoc {2}{2}{Social Contact Networks}{10}{0}{2}
+\beamer@sectionintoc {3}{Datasets}{15}{0}{3}
+\beamer@sectionintoc {4}{Infection, vaccination and result}{19}{0}{4}
+\beamer@sectionintoc {5}{Hive Plot}{26}{0}{5}
+\beamer@sectionintoc {6}{Human mobility}{33}{0}{6}
+\beamer@sectionintoc {7}{Conclusion}{39}{0}{7}

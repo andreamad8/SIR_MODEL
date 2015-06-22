@@ -1,0 +1,48 @@
+USA Select 70000
+USE open_fly;
+
+select * from airport as orig,
+(select origin, dest, sum(PASSENGERS) as pass from pass_usa 
+where months=2
+group by origin, dest
+having pass>70000
+order by pass desc) as fly, airport as dest
+where orig.IATA=fly.origin and dest.IATA=fly.dest
+
+
+USA Select total
+USE open_fly;
+
+select orig.IATA, dest.IATA, fly.pass from airport as orig,
+(select origin, dest, sum(PASSENGERS) as pass from pass_usa 
+where months=2
+group by origin, dest
+having pass>4000
+order by pass desc) as fly, airport as dest
+where orig.IATA=fly.origin and dest.IATA=fly.dest and dest.Country='United states' and orig.Country='United states' 
+INTO OUTFILE 'C:/Users/andrea/Desktop/flight/create_graph/Dataset/Openflight/edge.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY ' '
+LINES TERMINATED BY '\n';
+
+
+
+INTERNATIONAL TOTAL 	
+use open_fly;
+
+select O1.country_name,D1.country_name, A.pass from flight.country_coo as O1,
+(
+select orig.country as O, dest.country as D, sum(fly.PASSENGERS) as pass from
+(select IATA, country from airport)as orig,
+pass_international as fly,
+(select IATA, country from airport)as dest
+where orig.IATA=fly.ORIGIN and dest.IATA=fly.DEST
+group by orig.country, dest.country 
+having pass > 100
+order by pass desc
+)as A, flight.country_coo as D1
+where A.O=O1.country_name and A.D=D1.country_name
+INTO OUTFILE 'C:/Users/andrea/Desktop/flight/create_graph/Dataset/Openflight/edge_international.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+  <script src="min.js"></script>
+  <script src="topo.js"></script>
+  <script src="jquery.js"></script>
+  <script src="map.js"></script>
+  <div id="container" style=" width: 60%;height:100%;float:left"></div>
+ <div id="container1" style=" width: 40%; height: 100%;float:right;"></div>
+     
+<script>
+       //basic map config with custom fills, mercator projection
+      var map = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container'),
+        projection: 'mercator',
+        geographyConfig: {
+            highlightOnHover: false,
+            popupOnHover: true
+        },
+        //height: 1000,
+        responsive: true,
+        fills: {
+          defaultFill: '#ABDDA4',
+          lt50: 'rgba(0,244,244,0.9)',
+          gt50: 'red'
+        }/*,
+        
+        data: {
+          USA: {fillKey: 'lt50' },
+          RUS: {fillKey: 'lt50' }      
+        }*/
+      })
+      
+      links_path='globe.json';
+      $.getJSON( links_path, function( json ) {
+       console.log("here"); 
+        links= json;
+        map.arc(links, {strokeWidth: 0.5,greatArc:false ,arcSharpness: 1,strokeColor: 'rgba(100, 10, 200, 0.4)'});
+      });
+
+
+
+
+ var map_globe = new Datamap({
+        scope: 'world',
+        element: document.getElementById('container1'),
+        projection: 'orthographic',
+        fills: {
+          defaultFill: "#ABDDA4"
+        },
+        geographyConfig: {
+            highlightOnHover: false,
+            popupOnHover: true
+        },
+        projectionConfig: {
+          rotation: [30,-65]
+        },
+        responsive: true,
+       /* data: {
+          'USA': {fillKey: 'lt50' },
+          'MEX': {fillKey: 'lt25' },
+          'CAN': {fillKey: 'gt50' },     
+          'GTM': {fillKey: 'gt500'},
+          'HND': {fillKey: 'eq50' },
+          'BLZ': {fillKey: 'pink' },
+          'GRL': {fillKey: 'eq0' },
+          'CAN': {fillKey: 'gt50' }       
+        }*/
+      });
+
+      map_globe.graticule();
+      links_path='globe.json';
+          $.getJSON( links_path, function( json ) { 
+            links= json;
+            map_globe.arc(links, {strokeWidth: 0.5,greatArc:true ,arcSharpness: 3,strokeColor: 'rgba(100, 10, 200, 0.4)'});
+      });
+
+arr=[];
+arr=['CAN','USA','GTM'];
+obj={};
+obj[arr[0]]="#FF7F7F";
+obj[arr[1]]="#FF7F7F";
+obj[arr[2]]="#FF7F7F";
+console.log(obj);
+
+function update(){
+
+      map.updateChoropleth(obj);
+      map_globe.updateChoropleth(obj);
+    }
+i=0;
+var id=window.setInterval(function(){update(i);i++;},400);
+</script> 
+</body>
