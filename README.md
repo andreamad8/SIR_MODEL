@@ -1,5 +1,5 @@
 # SIR_MODEL
 - MAP ![MAP](map.gif)
-- HIVE ![HIVE](hive.jpg)
+- HIVE ![HIVE](hive.gif)
 
 
